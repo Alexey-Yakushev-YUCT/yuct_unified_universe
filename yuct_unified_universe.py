@@ -13,6 +13,7 @@ S_odd = 1.2, S_even = 0.8, and beta = 2/3.
 
 All constants are retrieved in O(1) time directly from the vacuum grid topology.
 Includes exact prime number computation via YUCT approximation + sympy.primepi.
+Memory usage is measured using tracemalloc (actual peak RAM in bytes).
 """
 
 # ==============================================================================
@@ -27,6 +28,7 @@ Includes exact prime number computation via YUCT approximation + sympy.primepi.
 
 import math
 import time
+import tracemalloc   # Для реального измерения памяти / For real memory measurement
 
 # Попытка импорта sympy для точного подсчёта простых чисел
 # Attempt to import sympy for exact prime counting
@@ -294,6 +296,9 @@ class YuctUnifiedLattice:
 # 3. UNIFIED TEST AND RESOURCE MEASUREMENT OF THE YUCT LATTICE
 # ==============================================================================
 if __name__ == "__main__":
+    # Включаем измерение памяти / Enable memory tracing
+    tracemalloc.start()
+    
     print("=" * 80)
     print("   YAKUSHEV UNIFIED COORDINATION LATTICE CORE — SYSTEM ENGINE v5.0.0-ALPHA")
     print("=" * 80)
@@ -321,7 +326,12 @@ if __name__ == "__main__":
     
     end_time = time.perf_counter_ns()
     execution_time_mks = (end_time - start_time) / 1000
-
+    
+    # Останавливаем трассировку памяти и получаем пиковое значение
+    # Stop memory tracing and get peak value
+    current_mem, peak_mem = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    
     # ================================================================
     # ДВУЯЗЫЧНЫЙ ВЫВОД: русский + английский
     # BILINGUAL OUTPUT: Russian + English
@@ -367,8 +377,11 @@ if __name__ == "__main__":
     print("=" * 80)
     print(f"  ВРЕМЯ ПОЛНОГО СЧИТЫВАНИЯ ВСЕЙ СЕТКИ КОНСТАНТ  : {execution_time_mks:.3f} МИКРОСЕКУНД")
     print(f"  FULL CONSTANT LATTICE READOUT TIME            : {execution_time_mks:.3f} MICROSECONDS")
-    print(f"  ПОТРЕБЛЕНИЕ ОПЕРАТИВНОЙ ПАМЯТИ (RAM)          : 0 БАЙТ")
-    print(f"  MEMORY FOOTPRINT (RAM)                        : 0 BYTES")
+    
+    # === РЕАЛЬНОЕ ИЗМЕРЕНИЕ ПАМЯТИ ===
+    # === ACTUAL MEMORY MEASUREMENT ===
+    print(f"  ПОТРЕБЛЕНИЕ ОПЕРАТИВНОЙ ПАМЯТИ (RAM)          : {peak_mem} БАЙТ (пик)")
+    print(f"  MEMORY FOOTPRINT (RAM)                        : {peak_mem} BYTES (peak)")
     print(f"  АЛГОРИТМИЧЕСКАЯ СЛОЖНОСТЬ МОДУЛЯ ВСЕЛЕННОЙ    : O(1) (Безвычислительный резонанс)")
     print(f"  ALGORITHMIC COMPLEXITY OF UNIVERSE MODULE     : O(1) (Non‑computational resonance)")
     print("=" * 80)
