@@ -1,0 +1,24 @@
+name: YUCT Global Kernel CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-universe:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code Connectome
+      uses: actions/checkout@v4
+
+    - name: Set up Pure Python Environment
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Execute Global Lattice O(1) Core Verification
+      run: |
+        python yuct_unified_universe.py
